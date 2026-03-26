@@ -1,0 +1,467 @@
+/* =========================
+GOOGLE FONTS
+========================= */
+
+@import url(‘https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap’);
+@import url(‘https://fonts.googleapis.com/css2?family=Quantico:wght@400;700&display=swap’);
+@import url(‘https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap’);
+@import url(‘https://fonts.googleapis.com/css2?family=Quintessential&display=swap’);
+
+/* =========================
+TAILWIND
+========================= */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+GLOBAL
+========================= */
+
+body{
+margin:0;
+
+font-family:-apple-system,BlinkMacSystemFont,“Segoe UI”,Roboto,sans-serif;
+
+background:
+radial-gradient(circle at 20% 20%, rgba(167,139,250,0.12), transparent 40%),
+radial-gradient(circle at 80% 70%, rgba(59,130,246,0.08), transparent 40%),
+#0B0F19;
+
+color:#9CA3AF;
+}
+
+/* =========================
+HERO SECTION
+========================= */
+
+.hero{
+
+position:relative;
+min-height:100vh;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+
+padding:120px 80px;
+
+overflow:hidden;
+
+/* Driven by Hero.jsx on scroll. */
+--hero-progress:0;
+
+background:transparent;
+
+}
+
+/* Background image layer that submerges while scrolling. */
+.hero-bg{
+position:absolute;
+inset:0;
+z-index:0;
+pointer-events:none;
+
+background-image:
+linear-gradient(
+to right,
+rgba(8,8,12,0.85) 0%,
+rgba(8,8,12,0.70) 35%,
+rgba(8,8,12,0.35) 65%,
+rgba(8,8,12,0.10) 100%
+),
+url("/hero-bg.png");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+
+transform:
+translate3d(0, calc(var(--hero-progress) * 140px), 0)
+scale(calc(1 + var(--hero-progress) * 0.08));
+
+will-change:transform;
+}
+
+/* Dark overlay that grows from the bottom to blend into the next section. */
+.hero-submerge{
+position:absolute;
+left:0;
+right:0;
+bottom:0;
+z-index:1;
+pointer-events:none;
+
+height:calc(20% + var(--hero-progress) * 80%);
+background:
+radial-gradient(circle at 20% 20%, rgba(167,139,250,0.12), transparent 40%),
+radial-gradient(circle at 80% 70%, rgba(59,130,246,0.08), transparent 40%),
+#0B0F19;
+}
+
+/* =========================
+HERO LAYOUT
+========================= */
+
+.hero-container{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:80px;
+position:relative;
+z-index:2;
+}
+
+/* =========================
+BRAND
+========================= */
+
+.brand{
+font-family:‘Space Grotesk’, sans-serif;
+font-size:90px;
+font-weight:600;
+letter-spacing:3px;
+color:#C4B5FD;
+margin-bottom:24px;
+}
+
+/* =========================
+LEFT SIDE
+========================= */
+
+.hero-left{
+max-width:520px;
+}
+
+/* HERO TITLE */
+
+.hero-title{
+font-size:50px;
+font-weight:700;
+line-height:1.15;
+color:#F3F4F6;
+}
+
+/* HIGHLIGHT WORD */
+
+.hero-title span{
+color:#A78BFA;
+text-shadow:0 0 20px rgba(167,139,250,0.35);
+animation:glowPulse 3s ease-in-out infinite;
+}
+
+/* GLOW ANIMATION */
+
+@keyframes glowPulse{
+
+0%{text-shadow:0 0 8px rgba(167,139,250,0.3);}
+50%{text-shadow:0 0 28px rgba(167,139,250,0.7);}
+100%{text-shadow:0 0 8px rgba(167,139,250,0.3);}
+
+}
+
+/* HERO SUBTITLE */
+
+.hero-subtitle{
+margin-top:20px;
+line-height:1.6;
+color:#9CA3AF;
+}
+
+/* HERO BUTTONS */
+
+.hero-buttons{
+margin-top:30px;
+display:flex;
+gap:16px;
+}
+
+.btn-primary{
+background:#A78BFA;
+border:none;
+padding:12px 26px;
+border-radius:8px;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.btn-primary:hover{
+background:#8b6df2;
+}
+
+.btn-secondary{
+background:transparent;
+border:1px solid #2e303a;
+padding:12px 26px;
+border-radius:8px;
+color:#F3F4F6;
+cursor:pointer;
+transition:0.2s;
+}
+
+.btn-secondary:hover{
+border-color:#A78BFA;
+}
+
+/* =========================
+HERO RIGHT SIDE
+========================= */
+
+.hero-right{
+position:relative;
+}
+
+/* AI DASHBOARD CARD */
+
+.dashboard-preview{
+position:absolute;
+right:120px;
+top:120px;
+width:300px;
+
+background:rgba(22,23,29,0.85);
+backdrop-filter:blur(12px);
+
+border:1px solid #2e303a;
+border-radius:12px;
+
+padding:20px;
+
+box-shadow:
+rgba(0,0,0,0.4) 0 10px 15px -3px,
+rgba(0,0,0,0.25) 0 4px 6px -2px;
+}
+
+.dashboard-preview h4{
+margin:0 0 12px;
+color:#F3F4F6;
+}
+
+.dashboard-preview ul{
+margin:0;
+padding-left:18px;
+}
+
+/* =========================
+HERO FEATURE BAR
+========================= */
+
+.hero-features{
+position:absolute;
+bottom:60px;
+left:50%;
+transform:translateX(-50%);
+z-index:2;
+}
+
+.feature-bar{
+display:flex;
+gap:32px;
+}
+
+/* HERO SMALL CARDS */
+
+.feature-card{
+
+font-family:‘Quantico’, sans-serif;
+font-size:15px;
+letter-spacing:1px;
+
+display:flex;
+align-items:center;
+gap:10px;
+
+padding:18px 30px;
+
+border-radius:12px;
+
+border:1px solid rgba(255,255,255,0.08);
+
+background:rgba(255,255,255,0.03);
+
+backdrop-filter:blur(10px);
+
+cursor:pointer;
+
+transition:all 0.25s ease;
+}
+
+.feature-card:hover{
+border-color:#A78BFA;
+background:rgba(167,139,250,0.12);
+transform:translateY(-3px);
+}
+
+/* =========================
+FEATURE SHOWCASE
+========================= */
+
+.feature-showcase{
+padding:120px 100px 40px;
+}
+
+/* HEADING */
+
+.showcase-heading{
+font-family:‘Quintessential’, sans-serif;
+font-size:60px;
+font-weight:600;
+letter-spacing:2px;
+text-align:center;
+margin-bottom:60px;
+color:#F3F4F6;
+}
+
+/* FEATURE ROW */
+
+.showcase-row{
+display:flex;
+align-items:center;
+gap:80px;
+margin-bottom:80px;
+}
+
+.showcase-row.reverse{
+flex-direction:row-reverse;
+}
+
+/* TEXT SIDE */
+
+.feature-text{
+flex:1;
+}
+
+.feature-text h3{
+font-family:‘Quintessential’, serif;
+font-size:36px;
+color:#F3F4F6;
+margin:10px 0;
+}
+
+.feature-text p{
+color:#9CA3AF;
+margin-bottom:15px;
+max-width:480px;
+}
+
+.feature-text ul{
+padding-left:18px;
+}
+
+.feature-text li{
+margin-bottom:6px;
+color:#A78BFA;
+}
+
+/* IMAGE SIDE */
+
+.feature-image{
+flex:1;
+}
+
+.image-box{
+
+padding:24px;
+
+border-radius:20px;
+
+background:rgba(20,22,35,0.6);
+
+border:1px solid rgba(167,139,250,0.25);
+
+backdrop-filter:blur(14px);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+box-shadow:0 0 60px rgba(167,139,250,0.15);
+}
+
+.image-box img{
+width:100%;
+max-width:520px;
+border-radius:14px;
+}
+
+/* =========================
+WHY TRIAGEX
+========================= */
+
+.why-triagex{
+padding:60px 100px 120px;
+}
+
+.why-heading{
+font-family:‘Space Grotesk’, sans-serif;
+font-size:48px;
+font-weight:600;
+text-align:center;
+margin-bottom:50px;
+color:#F3F4F6;
+}
+
+/* horizontal scroll */
+
+.why-scroll{
+display:flex;
+gap:28px;
+
+overflow-x:auto;
+
+scroll-snap-type:x mandatory;
+
+scroll-behavior:smooth;
+
+padding-bottom:10px;
+}
+
+.why-scroll::-webkit-scrollbar{
+display:none;
+}
+
+/* cards */
+
+.why-card{
+
+flex:0 0 320px;
+
+padding:30px;
+
+border-radius:18px;
+
+background:rgba(255,255,255,0.03);
+
+border:1px solid rgba(167,139,250,0.25);
+
+backdrop-filter:blur(12px);
+
+scroll-snap-align:start;
+
+transition:all 0.25s ease;
+}
+
+.why-card:hover{
+transform:translateY(-6px);
+border-color:#A78BFA;
+box-shadow:0 0 30px rgba(167,139,250,0.2);
+}
+
+.why-icon{
+color:#A78BFA;
+margin-bottom:16px;
+}
+
+.why-card h3{
+color:#F3F4F6;
+font-size:18px;
+margin-bottom:10px;
+}
+
+.why-card p{
+color:#9CA3AF;
+line-height:1.6;
+}
