@@ -1,6 +1,10 @@
 import logo from "../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+
+  const navigate = useNavigate();
+
   return (
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[85%] max-w-6xl z-50">
 
@@ -20,7 +24,7 @@ export default function Navbar() {
           <img
             src={logo}
             alt="TriageX Logo"
-            className="w-10 h-10 object contain"
+            className="w-10 h-10 object-contain"
           />
 
           <span className="text-[#C4B5FD] font-semibold text-lg tracking-wide">
@@ -158,7 +162,10 @@ export default function Navbar() {
 
           {/* LOGIN */}
 
-          <button className="text-[#F3F4F6] hover:text-[#A78BFA] transition">
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-[#F3F4F6] hover:text-[#A78BFA] transition"
+          >
             Login
           </button>
 

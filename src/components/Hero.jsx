@@ -8,39 +8,8 @@ function Hero() {
     const el = heroRef.current
     if (!el) return
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches
-
-    if (prefersReducedMotion) {
-      el.style.setProperty("--hero-progress", "0")
-      return
-    }
-
-    let ticking = false
-
-    const update = () => {
-      ticking = false
-      const rect = el.getBoundingClientRect()
-      const end = rect.height * 0.85 // finish submerge before hero fully leaves viewport
-      const progress = Math.max(0, Math.min(1, (0 - rect.top) / end))
-      el.style.setProperty("--hero-progress", String(progress))
-    }
-
-    const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(update)
-    }
-
-    update()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", onScroll)
-
-    return () => {
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", onScroll)
-    }
+    // STATIC HERO (NO SCROLL ANIMATION)
+    el.style.setProperty("--hero-progress", "0")
   }, [])
 
   return (
@@ -74,11 +43,9 @@ function Hero() {
 
         </div>
 
-
         <div className="hero-right">
 
           <div className="dashboard-preview">
-
             <h4>AI Health Scan</h4>
 
             <ul>
@@ -86,7 +53,6 @@ function Hero() {
               <li>Risk level analysis</li>
               <li>Recommended care</li>
             </ul>
-
           </div>
 
         </div>
