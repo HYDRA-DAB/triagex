@@ -1,5 +1,8 @@
 import AuthCard from "../components/auth/AuthCard";
 import logo from "../assets/logo.png";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { supabase } from "../lib/supabaseClient";
 
 /* ── Decorative icons (inline SVG) ── */
 
@@ -25,6 +28,18 @@ const LockKeyIcon = () => (
 );
 
 export default function Auth() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        navigate('/dashboard');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
   return (
     <div className="relative min-h-screen flex overflow-hidden bg-[#060a14]">
 

@@ -44,40 +44,13 @@ const features = [
     ],
     impact:
       "Patients gain clarity and confidence when reading medical information that is normally difficult to understand."
-  },
-
-  {
-    title: "TreatX",
-    icon: Pill,
-    image: "/treatx.jpeg",
-    desc: "Treat provides users with guidance about potential treatments and possible next care steps based on their condition.",
-    points: [
-      "Treatment awareness guidance",
-      "Suggested next steps",
-      "Care recommendations",
-      "General health advice"
-    ],
-    impact:
-      "This helps users understand possible treatment directions before consulting a healthcare professional."
-  },
-
-  {
-    title: "PreventionX",
-    icon: ShieldCheck,
-    image: "/preventionx.jpeg",
-    desc: "Prevention focuses on early detection and preventive health awareness by tracking lifestyle signals such as fatigue, sleep, and stress patterns.",
-    points: [
-      "Health habit monitoring",
-      "Fatigue and stress tracking",
-      "Lifestyle imbalance detection",
-      "Early health alerts"
-    ],
-    impact:
-      "By identifying patterns early, users can take preventive action before minor issues become serious health concerns."
   }
 ]
 
+import { useNavigate } from "react-router-dom"
+
 export default function FeatureShowcase() {
+  const navigate = useNavigate()
 
   return (
 
@@ -95,7 +68,13 @@ export default function FeatureShowcase() {
 
           <div
             key={index}
-            className={`showcase-row ${index % 2 !== 0 ? "reverse" : ""}`}
+            onClick={
+              feature.title === "SymptomX" ? () => navigate("/symptomx") :
+              feature.title === "DictionaryX" ? () => navigate("/dictionaryx") :
+              feature.title === "FinderX" ? () => navigate("/finderx") :
+              undefined
+            }
+            className={`showcase-row ${index % 2 !== 0 ? "reverse" : ""} ${feature.title === "SymptomX" || feature.title === "DictionaryX" || feature.title === "FinderX" ? "cursor-pointer" : ""}`}
           >
 
             <div className="feature-text">

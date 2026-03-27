@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react"
+import { useNavigate } from "react-router-dom"
 import FeatureBar from "./FeatureBar"
 
 function Hero() {
+  const navigate = useNavigate()
   const heroRef = useRef(null)
 
   useEffect(() => {
@@ -37,8 +39,8 @@ function Hero() {
           </p>
 
           <div className="hero-buttons">
-            <button className="btn-primary">Check Symptoms</button>
-            <button className="btn-secondary">Find Doctor</button>
+            <button className="btn-primary" onClick={() => navigate("/symptomx")}>Check Symptoms</button>
+            <button className="btn-secondary" onClick={() => navigate("/finderx")}>Find Doctor</button>
           </div>
 
         </div>

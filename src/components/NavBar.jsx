@@ -38,7 +38,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-10 text-sm text-[#F3F4F6]">
 
-          <a href="#home" className="hover:text-[#A78BFA] transition">
+          <a onClick={(e) => { e.preventDefault(); navigate("/"); }} className="hover:text-[#A78BFA] transition cursor-pointer">
             Home
           </a>
 
@@ -64,34 +64,23 @@ export default function Navbar() {
             border border-white/10 backdrop-blur-xl
             ">
 
-              <a href="#finder" className="hover:text-[#A78BFA] transition">
+              <a onClick={(e) => { e.preventDefault(); navigate("/finderx"); }} className="hover:text-[#A78BFA] transition cursor-pointer">
                 FinderX
               </a>
 
-              <a href="#symptom" className="hover:text-[#A78BFA] transition">
+              <a onClick={(e) => { e.preventDefault(); navigate("/symptomx"); }} className="hover:text-[#A78BFA] transition cursor-pointer">
                 SymptomX
               </a>
 
-              <a
-                href="#prevention"
-                className="ml-4 text-[#9CA3AF] hover:text-[#A78BFA] transition text-xs"
-              >
-                └ PreventionX
-              </a>
-
-              <a href="#dictionary" className="hover:text-[#A78BFA] transition">
+              <a onClick={(e) => { e.preventDefault(); navigate("/dictionaryx"); }} className="hover:text-[#A78BFA] transition cursor-pointer">
                 DictionaryX
-              </a>
-
-              <a href="#treat" className="hover:text-[#A78BFA] transition">
-                TreatX
               </a>
 
             </div>
 
           </div>
 
-          <a href="#dashboard" className="hover:text-[#A78BFA] transition">
+          <a onClick={(e) => { e.preventDefault(); navigate("/dashboard"); }} className="hover:text-[#A78BFA] transition cursor-pointer">
             Dashboard
           </a>
 
