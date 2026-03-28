@@ -68,13 +68,7 @@ export default function FeatureShowcase() {
 
           <div
             key={index}
-            onClick={
-              feature.title === "SymptomX" ? () => navigate("/symptomx") :
-              feature.title === "DictionaryX" ? () => navigate("/dictionaryx") :
-              feature.title === "FinderX" ? () => navigate("/finderx") :
-              undefined
-            }
-            className={`showcase-row ${index % 2 !== 0 ? "reverse" : ""} ${feature.title === "SymptomX" || feature.title === "DictionaryX" || feature.title === "FinderX" ? "cursor-pointer" : ""}`}
+            className={`showcase-row ${index % 2 !== 0 ? "reverse" : ""}`}
           >
 
             <div className="feature-text">
