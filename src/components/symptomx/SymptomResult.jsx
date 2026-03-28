@@ -2,12 +2,12 @@ import React from 'react';
 
 const FALLBACK_CONDITIONS = [
   {
-    name: "Probable Infection",
-    description: "Symptoms indicate a likely infectious condition requiring evaluation."
+    name: "Acute Localized Condition",
+    description: "Symptoms indicate a localized medical issue requiring evaluation."
   },
   {
-    name: "Localized Inflammatory Condition",
-    description: "Symptoms suggest localized inflammation in the affected area."
+    name: "Functional System Disorder",
+    description: "Symptoms suggest dysfunction in the affected system."
   }
 ];
 
