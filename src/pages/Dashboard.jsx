@@ -1,10 +1,24 @@
-import React from 'react';
+import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/NavBar";
 
 export default function Dashboard({ user }) {
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setCurrentUser(data.user);
+
+      if (!data.user) {
+        navigate("/");
+      }
+    };
+
+    getUser();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -12,7 +26,7 @@ export default function Dashboard({ user }) {
   };
 
   // Mock Data 
-  const userName = user?.email?.split('@')[0] || "User";
+  const userName = currentUser?.email?.split('@')[0] || "User";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-900 text-slate-100 font-sans relative overflow-y-auto selection:bg-purple-500/30 pb-20">
