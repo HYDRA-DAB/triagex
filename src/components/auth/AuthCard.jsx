@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import AuthTabs from "./AuthTabs";
 import AuthInput from "./AuthInput";
@@ -39,13 +40,33 @@ const GoogleIcon = () => (
 /* ── Component ── */
 
 export default function AuthCard() {
+  const navigate = useNavigate();
   const [tab, setTab] = useState("signin");
   const [remember, setRemember] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleGoogleLogin = async () => {
     await supabase.auth.signInWithOAuth({
-      provider: "google"
+      provider: "google",
+      options: {
+        redirectTo: "http://localhost:5173/dashboard"
+      }
     });
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.error(error.message);
+    } else if (data.user) {
+      navigate("/dashboard");
+    }
   };
 
   return (
@@ -66,7 +87,7 @@ export default function AuthCard() {
 
       {/* ── Sign In Form ── */}
       {tab === "signin" && (
-        <div className="flex flex-col gap-5 animate-[fadeIn_0.3s_ease-out]">
+        <form onSubmit={handleLogin} className="flex flex-col gap-5 animate-[fadeIn_0.3s_ease-out]">
           <div>
             <h2 className="text-xl font-bold text-white tracking-tight">
               Welcome Back
@@ -98,6 +119,8 @@ export default function AuthCard() {
             type="email"
             placeholder="you@hospital.org"
             icon={<MailIcon />}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <AuthInput
             id="signin-password"
@@ -105,6 +128,8 @@ export default function AuthCard() {
             type="password"
             placeholder="••••••••••••"
             icon={<LockIcon />}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           {/* Remember + Forgot */}
@@ -117,10 +142,9 @@ export default function AuthCard() {
                 className={`
                   w-4 h-4 rounded border flex items-center justify-center
                   transition-all duration-200
-                  ${
-                    remember
-                      ? "bg-violet-600 border-violet-500"
-                      : "bg-transparent border-white/[0.15]"
+                  ${remember
+                    ? "bg-violet-600 border-violet-500"
+                    : "bg-transparent border-white/[0.15]"
                   }
                 `}
                 onClick={() => setRemember(!remember)}
@@ -160,7 +184,7 @@ export default function AuthCard() {
             <LockIcon />
             Authorize Identity
           </AuthButton>
-        </div>
+        </form>
       )}
 
       {/* ── Sign Up Form ── */}
