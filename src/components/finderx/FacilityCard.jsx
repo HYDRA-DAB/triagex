@@ -17,15 +17,39 @@ function FacilityCard({ facility, isSelected, onClick }) {
       </div>
 
       <p className="text-sm font-light text-indigo-100/70 line-clamp-2">
-        {facility.desc}
+        {facility.desc || 'Healthcare facility providing medical services.'}
       </p>
 
       <div className="flex flex-wrap gap-2 mt-auto pt-2">
-        {facility.tags.map(tag => (
-          <span key={tag} className="px-3 py-1 bg-black/30 border border-white/5 rounded-full text-xs font-medium text-indigo-200">
-            {tag}
+        {/* Tag badge */}
+        {facility.tag && (
+          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
+            facility.tag === 'Closest'
+              ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
+              : facility.tag === 'Top Rated'
+              ? 'bg-amber-500/10 text-amber-300 border-amber-500/20'
+              : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20'
+          }`}>
+            {facility.tag}
           </span>
-        ))}
+        )}
+        {/* Rating */}
+        {facility.rating && (
+          <span className="px-3 py-1 bg-black/30 border border-white/5 rounded-full text-xs font-medium text-amber-300 flex items-center gap-1">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            {facility.rating}
+          </span>
+        )}
+        {/* Open status */}
+        {facility.openNow !== undefined && (
+          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
+            facility.openNow 
+              ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' 
+              : 'bg-red-500/10 text-red-300 border-red-500/20'
+          }`}>
+            {facility.openNow ? 'Open Now' : 'Closed'}
+          </span>
+        )}
       </div>
     </button>
   );
