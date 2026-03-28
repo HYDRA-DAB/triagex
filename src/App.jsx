@@ -17,7 +17,9 @@ function Home() {
     <>
       <Navbar />
       <Hero />
-      <FeatureShowcase />
+      <div className="w-full bg-[#0B0F19]">
+        <FeatureShowcase />
+      </div>
       <WhyTriageX />
     </>
   )

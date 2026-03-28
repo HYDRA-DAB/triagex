@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import FeatureBar from "./FeatureBar"
 
 function Hero() {
   const navigate = useNavigate()
@@ -15,7 +14,7 @@ function Hero() {
   }, [])
 
   return (
-    <section className="hero" ref={heroRef}>
+    <section className="hero overflow-hidden" ref={heroRef}>
       <div className="hero-bg" aria-hidden="true" />
       <div className="hero-submerge" aria-hidden="true" />
 
@@ -39,8 +38,9 @@ function Hero() {
           </p>
 
           <div className="hero-buttons">
-            <button className="btn-primary" onClick={() => navigate("/symptomx")}>Check Symptoms</button>
-            <button className="btn-secondary" onClick={() => navigate("/finderx")}>Find Doctor</button>
+            <button className="btn-primary whitespace-nowrap" onClick={() => navigate("/symptomx")}>Check Symptoms</button>
+            <button className="btn-secondary whitespace-nowrap" onClick={() => navigate("/finderx")}>Find Doctor</button>
+            <button className="btn-secondary whitespace-nowrap" onClick={() => navigate("/dictionaryx")}>Medical Dictionary</button>
           </div>
 
         </div>
@@ -59,10 +59,6 @@ function Hero() {
 
         </div>
 
-      </div>
-
-      <div className="hero-features">
-        <FeatureBar />
       </div>
 
     </section>

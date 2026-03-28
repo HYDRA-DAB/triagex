@@ -45,7 +45,7 @@ HERO SECTION
     flex-direction: column;
     justify-content: center;
 
-    padding: 120px 80px;
+    padding: 120px 80px 40px;
 
     overflow: hidden;
 
@@ -253,11 +253,11 @@ HERO FEATURE BAR
 ========================= */
 
 .hero-features {
-    position: absolute;
-    bottom: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
+    position: relative;
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
 }
 
 .feature-bar {
@@ -303,7 +303,10 @@ FEATURE SHOWCASE
 ========================= */
 
 .feature-showcase {
-    padding: 120px 100px 40px;
+    padding: 0px 100px 40px;
+    margin-top: 0px;
+    position: relative;
+    z-index: 10;
 }
 
 /* HEADING */
