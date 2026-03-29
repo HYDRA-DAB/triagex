@@ -1,7 +1,7 @@
 import AuthCard from "../components/auth/AuthCard";
 import logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 
 /* ── Decorative icons (inline SVG) ── */
@@ -29,16 +29,38 @@ const LockKeyIcon = () => (
 
 export default function Auth() {
   const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        navigate('/dashboard');
-      }
-    });
+    // If URL has access token hash, we are processing an OAuth redirect
+    if (window.location.hash.includes("access_token")) {
+      setIsProcessing(true);
+    }
 
-    return () => subscription.unsubscribe();
+    const handleAuth = async () => {
+      const { data, error } = await supabase.auth.getSession();
+
+      console.log("SESSION:", data);
+
+      if (data?.session) {
+        navigate("/dashboard", { replace: true });
+      } else if (window.location.hash.includes("access_token")) {
+        console.error("Session not found", error);
+        setIsProcessing(false);
+      }
+    };
+
+    handleAuth();
   }, [navigate]);
+
+  if (isProcessing) {
+    return (
+      <div className="min-h-screen bg-[#060a14] flex flex-col items-center justify-center gap-4 text-white">
+        <div className="w-8 h-8 border-2 border-white/10 border-t-violet-500 rounded-full animate-spin" />
+        <p className="text-sm text-slate-400 animate-pulse tracking-wide">Signing you in...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen flex overflow-hidden bg-[#060a14]">

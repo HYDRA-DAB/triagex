@@ -34,37 +34,35 @@ function App() {
   const handleOAuthRedirect = async () => {
     const { data } = await supabase.auth.getSession()
 
-    if (data?.session) {
-      setUser(data.session.user)
-      setLoading(false)
-    }
-  }
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log("AUTH EVENT:", event);
+        console.log("SESSION:", session);
 
-  handleOAuthRedirect()
+        setUser(session?.user ?? null);
+        setLoading(false);
 
-  // existing logic (unchanged)
-  supabase.auth.getUser().then(({ data: { user } }) => {
-    setUser(user)
-    setLoading(false)
-  })
+        // Hard redirect if we are on the auth page to break React Router loops
+        if (session && window.location.pathname === "/auth") {
+          window.location.href = "/dashboard";
+        }
+      }
+    );
 
-  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-    setUser(session?.user ?? null)
-    setLoading(false)
-  })
+    return () => listener.subscription.unsubscribe();
+  }, [])
 
-  return () => subscription.unsubscribe()
-}, [])
-
-  if (loading) return null
+  if (loading) return null;
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/auth" element={user ? <Navigate to="/dashboard" replace /> : <Auth />} />
+        {/* Let Auth component handle its own redirect flow and processing */}
+        <Route path="/auth" element={<Auth />} />
+        {/* Protect Dashboard explicitly */}
         <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/auth" replace />} />
-        <Route path="/symptomx" element={<SymptomX />} /> {/* ✅ added */}
+        <Route path="/symptomx" element={<SymptomX />} />
         <Route path="/dictionaryx" element={<DictionaryX />} />
         <Route path="/finderx" element={<FinderX />} />
       </Routes>
