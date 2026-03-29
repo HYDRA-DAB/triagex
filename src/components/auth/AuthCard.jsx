@@ -47,12 +47,15 @@ export default function AuthCard() {
   const [password, setPassword] = useState("");
 
   const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:5173/dashboard"
+        redirectTo: `${window.location.origin}/auth`
       }
     });
+    if (error) {
+      console.error("Google OAuth error:", error.message);
+    }
   };
 
   const handleLogin = async (e) => {
@@ -87,7 +90,7 @@ export default function AuthCard() {
 
       {/* ── Sign In Form ── */}
       {tab === "signin" && (
-        <form onSubmit={handleLogin} className="flex flex-col gap-5 animate-[fadeIn_0.3s_ease-out]">
+        <div className="flex flex-col gap-5 animate-[fadeIn_0.3s_ease-out]">
           <div>
             <h2 className="text-xl font-bold text-white tracking-tight">
               Welcome Back
@@ -98,7 +101,7 @@ export default function AuthCard() {
           </div>
 
           {/* Google */}
-          <AuthButton id="btn-google-signin" variant="google" onClick={handleGoogleLogin}>
+          <AuthButton id="btn-google-signin" type="button" variant="google" onClick={handleGoogleLogin}>
             <GoogleIcon />
             Continue with Google
           </AuthButton>
@@ -112,8 +115,10 @@ export default function AuthCard() {
             <div className="flex-1 h-px bg-white/[0.06]" />
           </div>
 
-          {/* Fields */}
-          <AuthInput
+          {/* Form for email login */}
+          <form onSubmit={handleLogin} className="flex flex-col gap-5">
+            {/* Fields */}
+            <AuthInput
             id="signin-email"
             label="Work Email"
             type="email"
@@ -185,6 +190,7 @@ export default function AuthCard() {
             Authorize Identity
           </AuthButton>
         </form>
+        </div>
       )}
 
       {/* ── Sign Up Form ── */}
