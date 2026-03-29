@@ -29,11 +29,10 @@ function App() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user)
-      setLoading(false)
-    })
+ useEffect(() => {
+  // 🔥 handle OAuth redirect session (IMPORTANT)
+  const handleOAuthRedirect = async () => {
+    const { data } = await supabase.auth.getSession()
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
