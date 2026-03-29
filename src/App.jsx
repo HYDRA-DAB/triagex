@@ -29,19 +29,32 @@ function App() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user)
-      setLoading(false)
-    })
+ useEffect(() => {
+  // 🔥 handle OAuth redirect session (IMPORTANT)
+  const handleOAuthRedirect = async () => {
+    const { data } = await supabase.auth.getSession()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+    if (data?.session) {
+      setUser(data.session.user)
       setLoading(false)
-    })
+    }
+  }
 
-    return () => subscription.unsubscribe()
-  }, [])
+  handleOAuthRedirect()
+
+  // existing logic (unchanged)
+  supabase.auth.getUser().then(({ data: { user } }) => {
+    setUser(user)
+    setLoading(false)
+  })
+
+  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    setUser(session?.user ?? null)
+    setLoading(false)
+  })
+
+  return () => subscription.unsubscribe()
+}, [])
 
   if (loading) return null
 
