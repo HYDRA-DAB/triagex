@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/NavBar';
+import { useDictionary } from '../components/dictionaryx/useDictionary';
+import { getRiskColorClasses, getAbnormalValueColor } from '../components/dictionaryx/helpers';
 
 const DictionaryX = () => {
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState('');
+  const fileInputRef = useRef(null);
+  // eslint-disable-next-line no-unused-vars
+  const { loading, result, type, error, handleSearch, handleFileUpload } = useDictionary();
+
+  const onSearchSubmit = () => {
+    if (searchInput.trim()) handleSearch(searchInput);
+  };
+
+  const currentRisk = result?.risk_level || "Moderate Risk";
+  const riskColors = getRiskColorClasses(currentRisk);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-900 text-slate-100 font-sans relative overflow-hidden selection:bg-purple-500/30">
@@ -45,8 +57,12 @@ const DictionaryX = () => {
                 className="w-full bg-transparent text-white placeholder-indigo-200/40 outline-none text-lg font-light"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && onSearchSubmit()}
               />
-              <button className="ml-4 p-2 text-indigo-300/50 hover:text-indigo-300 transition-colors rounded-lg hover:bg-white/5">
+              <button 
+                onClick={onSearchSubmit}
+                disabled={loading && type !== 'report'}
+                className="ml-4 p-2 text-indigo-300/50 hover:text-indigo-300 transition-colors rounded-lg hover:bg-white/5 disabled:opacity-50">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
@@ -57,7 +73,10 @@ const DictionaryX = () => {
               <span className="text-sm font-medium text-indigo-300/60 uppercase tracking-wider">Trending:</span>
               <div className="flex flex-wrap gap-2">
                 {['Hypertension', 'Diabetes', 'Paracetamol', 'Blood Test'].map((term) => (
-                  <button key={term} className="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-indigo-500/20 hover:border-indigo-500/50 transition-all duration-300 text-sm text-indigo-200 hover:text-white shadow-sm">
+                  <button 
+                    key={term} 
+                    onClick={() => { setSearchInput(term); handleSearch(term); }}
+                    className="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-indigo-500/20 hover:border-indigo-500/50 transition-all duration-300 text-sm text-indigo-200 hover:text-white shadow-sm">
                     {term}
                   </button>
                 ))}
@@ -75,11 +94,13 @@ const DictionaryX = () => {
               
               <div className="flex justify-between items-start mb-6 pb-6 border-b border-white/5">
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-2">Hypertension</h2>
-                  <p className="text-indigo-200/60 font-medium">Commonly known as High Blood Pressure</p>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-2">
+                    {loading && type !== 'report' ? 'Analyzing...' : result?.title || "Hypertension"}
+                  </h2>
+                  <p className="text-indigo-200/60 font-medium">{result?.subtitle}</p>
                 </div>
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-sm font-semibold shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" /> Moderate Risk
+                <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${riskColors.bg} ${riskColors.text} ${riskColors.border} text-sm font-semibold ${riskColors.shadow}`}>
+                  <span className={`w-2 h-2 rounded-full ${riskColors.dot} animate-pulse`} /> {currentRisk}
                 </span>
               </div>
 
@@ -91,7 +112,7 @@ const DictionaryX = () => {
                       <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> Core Explanation
                     </h3>
                     <p className="text-indigo-200/80 leading-relaxed font-light text-sm md:text-base">
-                      A condition in which the force of the blood against the artery walls is too high. Usually hypertension is defined as blood pressure above 130/80, and is considered severe if the pressure is above 180/120.
+                      {result?.core_explanation}
                     </p>
                   </div>
                   
@@ -100,18 +121,12 @@ const DictionaryX = () => {
                       <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> What It Means
                     </h3>
                     <ul className="space-y-2 text-indigo-200/80 font-light text-sm md:text-base">
-                      <li className="flex items-start gap-2">
-                        <svg className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                        Increased workload on the heart and blood vessels.
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <svg className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                        Often has no visible symptoms over long periods.
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <svg className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                        Can lead to heart disease, stroke, or kidney failure if left untreated.
-                      </li>
+                      {result?.what_it_means?.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <svg className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                          {item}
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -123,19 +138,19 @@ const DictionaryX = () => {
                   <div className="space-y-4">
                     <div>
                       <h4 className="text-sm font-medium text-indigo-300 mb-1">Purpose</h4>
-                      <p className="text-xs text-indigo-200/70">To lower blood pressure and reduce the risk of cardiovascular complications.</p>
+                      <p className="text-xs text-indigo-200/70">{result?.medication_context?.purpose}</p>
                     </div>
                     
                     <div>
                       <h4 className="text-sm font-medium text-indigo-300 mb-1">Guidelines</h4>
-                      <p className="text-xs text-indigo-200/70">Take exactly as prescribed. Do not stop taking abruptly even if feeling better. Monitor BP at home.</p>
+                      <p className="text-xs text-indigo-200/70">{result?.medication_context?.guidelines}</p>
                     </div>
 
                     <div>
                       <h4 className="text-sm font-medium text-indigo-300 mb-2">Possible Side Effects</h4>
                       <div className="flex flex-wrap gap-2">
-                        {['Dizziness', 'Fatigue', 'Headache', 'Dry Cough'].map((effect) => (
-                          <span key={effect} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-indigo-200">
+                        {result?.medication_context?.side_effects?.map((effect, i) => (
+                          <span key={i} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-indigo-200">
                             {effect}
                           </span>
                         ))}
@@ -183,22 +198,86 @@ const DictionaryX = () => {
                 </p>
               </div>
 
-              {/* Upload Box */}
-              <div className="w-full mt-2 rounded-2xl border-2 border-dashed border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 hover:border-indigo-500/50 transition-all duration-300 p-8 flex flex-col items-center justify-center cursor-pointer group">
-                <svg className="w-10 h-10 text-indigo-400/70 mb-3 group-hover:text-indigo-400 group-hover:-translate-y-1 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-                <span className="text-indigo-200 font-medium mb-1 group-hover:text-white transition-colors">Drag & drop your file</span>
-                <span className="text-xs text-indigo-300/50">or click to browse</span>
-              </div>
+              {loading && type !== 'search' ? (
+                <div className="w-full mt-2 rounded-2xl border border-white/5 bg-black/20 p-8 flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
+                  <p className="text-indigo-200 text-sm">Analyzing Document...</p>
+                </div>
+              ) : type === 'report' && result ? (
+                <div className="w-full mt-2 rounded-2xl border border-white/5 bg-black/20 p-5 flex flex-col gap-4 overflow-y-auto max-h-[60vh] custom-scrollbar">
+                  <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                    <h4 className="text-indigo-50 font-semibold">Report Analysis</h4>
+                    <span className={`text-xs px-2 py-1 rounded-full ${getRiskColorClasses(result.risk_level).bg} ${getRiskColorClasses(result.risk_level).text}`}>{result.risk_level}</span>
+                  </div>
+                  <div>
+                    <h5 className="text-xs text-indigo-300 uppercase mb-1">Summary</h5>
+                    <p className="text-sm text-indigo-100 leading-relaxed font-light">{result.summary}</p>
+                  </div>
+                  
+                  {result.abnormal_values?.length > 0 && (
+                    <div>
+                      <h5 className="text-xs text-indigo-300 uppercase mb-2">Abnormal Values</h5>
+                      <div className="space-y-2">
+                        {result.abnormal_values.map((v, i) => (
+                          <div key={i} className="flex justify-between items-center text-xs bg-white/5 p-2 rounded-lg border border-white/5">
+                            <span className="text-indigo-200">{v.name}</span>
+                            <span className={`font-medium ${getAbnormalValueColor(v.status)}`}>{v.value} {v.status}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-              <button className="w-full py-4 mt-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-medium shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:shadow-indigo-500/40 hover:-translate-y-0.5">
-                Upload Prescription
-              </button>
-              
-              <p className="text-center text-xs text-indigo-300/40 font-medium tracking-wide">
-                SUPPORTED FORMATS: PDF, JPG, PNG
-              </p>
+                  <div>
+                    <h5 className="text-xs text-indigo-300 uppercase mb-2">Key Terms</h5>
+                    <ul className="space-y-1">
+                      {result.key_terms?.map((kt, i) => (
+                        <li key={i} className="text-xs text-indigo-200"><span className="text-indigo-100 font-medium">{kt.term}:</span> <span className="font-light">{kt.meaning}</span></li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h5 className="text-xs text-indigo-300 uppercase mb-1">Advice</h5>
+                    <p className="text-xs text-indigo-200 leading-relaxed italic">{result.advice}</p>
+                  </div>
+                  
+                  <button onClick={() => window.location.reload()} className="mt-2 text-xs text-indigo-400 hover:text-white transition-colors text-center w-full py-2 bg-white/5 rounded-lg border border-white/10">Analyze Another File</button>
+                </div>
+              ) : (
+                <>
+                  {/* Upload Box */}
+                  <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full mt-2 rounded-2xl border-2 border-dashed border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 hover:border-indigo-500/50 transition-all duration-300 p-8 flex flex-col items-center justify-center cursor-pointer group">
+                    <svg className="w-10 h-10 text-indigo-400/70 mb-3 group-hover:text-indigo-400 group-hover:-translate-y-1 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <span className="text-indigo-200 font-medium mb-1 group-hover:text-white transition-colors">Drag & drop your file</span>
+                    <span className="text-xs text-indigo-300/50">or click to browse</span>
+                  </div>
+
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    className="hidden" 
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) handleFileUpload(e.target.files[0]);
+                    }}
+                  />
+
+                  <button 
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={loading}
+                    className="w-full py-4 mt-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-medium shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:shadow-indigo-500/40 hover:-translate-y-0.5 disabled:opacity-50">
+                    Upload Prescription
+                  </button>
+                  
+                  <p className="text-center text-xs text-indigo-300/40 font-medium tracking-wide">
+                    SUPPORTED FORMATS: PDF, JPG, PNG
+                  </p>
+                </>
+              )}
 
             </div>
           </div>
