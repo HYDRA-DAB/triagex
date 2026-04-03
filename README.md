@@ -266,7 +266,7 @@ This project is licensed under the [ISC License](https://opensource.org/licenses
 
 ## 👨‍💻 Authors
 
-- Harsh Swaroop - [GitHub](https://github.com/your-username)
+- Harsh Swaroop - [GitHub](https://github.com/HYDRA-DAB)
 - Tanmay - [GitHub](https://github.com/Tanmay2007)
 
 ⭐ Star this repo if you found it useful!
