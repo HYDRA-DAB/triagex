@@ -2,7 +2,7 @@
 
 <br />
 <p align="center">
-  <img src="/assets/logo.png" alt="TriageX Logo" width="120" />
+  <img src="https://raw.githubusercontent.com/HYDRA-DAB/triagex/main/assets/logo.png" alt="TriageX Logo" width="120" />
 </p>
 
 # TriageX
