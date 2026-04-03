@@ -1,8 +1,9 @@
 <div align="center">
 
 <br />
-
-<img src="https://img.icons8.com/fluency/96/heart-monitor.png" width="80" alt="TriageX Logo" />
+<p align="center">
+  <img src="/assets/logo.png" alt="TriageX Logo" width="120" />
+</p>
 
 # TriageX
 
