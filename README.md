@@ -264,13 +264,10 @@ This project is licensed under the [ISC License](https://opensource.org/licenses
 
 <br />
 
-### 👨‍💻 Author
+## 👨‍💻 Authors
 
-**HYDRA-DAB**
-
-[![GitHub](https://img.shields.io/badge/GitHub-HYDRA--DAB-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/HYDRA-DAB)
-
-<br />
+- Harsh Swaroop - [GitHub](https://github.com/your-username)
+- Tanmay - [GitHub](https://github.com/Tanmay2007)
 
 ⭐ Star this repo if you found it useful!
 
